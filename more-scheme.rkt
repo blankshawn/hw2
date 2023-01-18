@@ -29,7 +29,7 @@
 ;; Problem 4
 ;;
 
-(define (cycle xs)
+(define (cycle-streams xs)
   'not-implemented)
 
 ;;
