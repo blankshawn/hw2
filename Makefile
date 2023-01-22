@@ -12,4 +12,4 @@ run-tests : run-tests.rkt tests.rkt $(HW).rkt
 
 .PHONY : test
 test : run-tests
-	./run-tests
+	racket run-tests.rkt

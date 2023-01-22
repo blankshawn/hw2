@@ -80,7 +80,12 @@
     (test-case
      "stream-zip infinite streams"
      (check-equal? (stream->list (stream-take (stream-zip integers integers) 3))
-                   '((0 . 0)  (1 . 1) (2 . 2))))))
+                   '((0 . 0)  (1 . 1) (2 . 2))))
+    
+    (test-case
+     "stream-zip proper time/space complexity"
+     (check-equal? (stream-ref (stream-zip integers integers) 10000)
+                   '(10000 . 10000)))))
 
 (define cycle-streams-tests
   (test-suite
@@ -94,8 +99,12 @@
    (test-case
     "cycle-streams infinite streams"
     (check-equal? (stream->list (stream-take (cycle-streams (integers-from 0) (integers-from 1)) 8))
-                  '((0 . 1) (1 . 2) (2 . 3) (3 . 4) (4 . 5) (5 . 6) (6 . 7) (7 . 8))))))
-
+                  '((0 . 1) (1 . 2) (2 . 3) (3 . 4) (4 . 5) (5 . 6) (6 . 7) (7 . 8))))
+    
+    (test-case
+     "cycle-streams proper time/space complexity"
+     (check-equal? (stream-ref (cycle-streams integers integers) 10000)
+                   '(10000 . 10000)))))
 
 ;; Map a function over a list with left-to-right order of evaluation guaranteed
 (define (map-ltor f xs)
@@ -106,8 +115,9 @@
 
 ;; Run apply-count in a sandbox so we get fresh state every time
 (define (map-apply-count f xs)
-  (let [(apply-count-eval (make-evaluator #:requires '("more-scheme.rkt") 'racket))]
-    (map-ltor (lambda (x) (apply-count-eval `(apply-count (quote ,f) (quote ,x)))) xs)))
+  (let [(sandbox-eval (make-evaluator #:requires '("more-scheme.rkt")
+                                      'racket))]
+    (map-ltor (lambda (x) (sandbox-eval `(apply-count (quote ,f) (quote ,x)))) xs)))
 
 (define apply-count-tests
    (test-suite
