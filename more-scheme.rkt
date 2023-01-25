@@ -9,21 +9,29 @@
 ;;
 
 (define (stream-pair-with f s)
-  'not-implemented)
+  (if (stream-empty? s)
+      empty-stream
+      
+  (stream-cons (cons (stream-first s) (f (stream-first s)))
+    (stream-pair-with f (stream-rest s)))))
 
-;;
-;; Problem 2
-;;
+  (define (stream-iterate f x)
 
-(define (stream-iterate f x)
-  'not-implemented)
+  (stream-cons x (stream-iterate f (f x))))
+
 
 ;;
 ;; Problem 3
 ;;
 
 (define (stream-zip xs ys)
-  'not-implemented)
+
+  (cond
+    
+    [(stream-empty? xs)empty-stream]
+    [(stream-empty? ys)empty-stream]
+    
+    [else (stream-cons (cons (stream-first xs) (stream-first ys)) (stream-zip (stream-rest xs) (stream-rest ys)))]))
 
 ;;
 ;; Problem 4
